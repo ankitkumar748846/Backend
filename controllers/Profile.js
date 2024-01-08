@@ -81,7 +81,8 @@ exports.deleteAccount = async(req,res)=>{
     {
         return res.status(500).json({
             success:false,
-            message:'User cannot be deleted  successfully',
+            message:'User cannot be deleted successfully',
+            error:error.message,
 
         });
 

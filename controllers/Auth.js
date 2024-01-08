@@ -19,7 +19,7 @@ exports.sendOTP = async(req,res)=>
             message:'User already registered',
         })
     }
-    let otp = otpGenerator.generator(6,{
+    var otp = otpGenerator.generator(6,{
         upperCaseAlphabets:false,
         lowerCaseAlphabets:false,
         specialChars:false,
@@ -241,10 +241,72 @@ exports.changePassword = async (req,res)=>
     //update password in db
     //send mail
     //return response
+    try {
+        //Get user data from req.user
+        const userDetails = await User.findById(req.user.id);
+        
+        //get oldPassword, newPassword
+        const {oldPassword, newPassword} = req.body;
 
+        //Validate old password
+        const isPasswordMatch = await bcrypt.compare(
+            oldPassword, 
+            userDetails.password
+        );
 
+        if(!isPasswordMatch) {
+            //if old password does not match, return a 401 (unauthorized) error
+            return res
+                .status(401)
+                .json({
+                success: false,
+                message: 'The Password is Incorrect',
+            })
+        }
 
-    
+        //update password
+        const encryptedPassword = await bcrypt.hash(newPassword, 10);
+        const updatedUserDetails = await User.findByIdAndUpdate(
+            req.user.id,
+            { password: encryptedPassword },
+            { new: true }
+        );
+
+        //send notification email
+        try {
+            const emailResponse = await mailSender(
+                updatedUserDetails.email,
+                `Password Updated Successfully for ${updatedUserDetails.firstName} ${updatedUserDetails.lastName}`,
+                passwordUpdated(
+                    updatedUserDetails.email,
+                    updatedUserDetails.firstName,
+                )
+            )
+            console.log('Email sent successfully................', emailResponse);
+        } catch (error) {
+            //if there's an error sending the email, log the error and return a 500 (Internal Server Error) error
+            console.log('Error Occurred While Sending Email: ', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error Occurred While Sending Email',
+                error: error.message,
+            });
+        }
+
+        //Return success response
+        return res
+            .status(200)
+            .json({ success: true, message: 'Password Updated Successfully' });
+
+    } catch (error) {
+        //if there's an error updating the password, log the error and return 500 (Internal Server Error) error
+        console.error('Error Occurred While Updating Password', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error Occurred While Updating Password',
+            error: error.message,
+        });
+    }
 }
 
 

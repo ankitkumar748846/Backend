@@ -13,7 +13,7 @@ exports.createSection = async(req,res) =>{
                 message:'Missing Properties',
             });
         } 
-        //create section
+        //create  new section
         const newSection = await Section.create({sectionName});
 
         //update course with section objectId
@@ -25,7 +25,15 @@ exports.createSection = async(req,res) =>{
                 }
             },
             {new:true},
-        );
+        )
+        .populate({
+            path:"courseContent",
+            populate:{
+                path:"subSection",
+            },
+
+        })
+        .exec();
         //return response
         return res.status(200).json({
             success:true,

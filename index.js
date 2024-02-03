@@ -31,16 +31,13 @@ app.use(
     tempFileDir: "/tmp",
   })
 );
-
 //cloudinary connect
 cloudinaryConnect();
-
 //routes
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/course", courseRoutes);
 app.use("/api/v1/payment", paymentRoutes);
-
 // default route
 app.get("/", (req, res) => {
   return res.json({
@@ -48,7 +45,6 @@ app.get("/", (req, res) => {
     message: "Your server is up and running....",
   });
 });
-
 app.listen(PORT, () => {
   console.log(`App is running at ${PORT}`);
 });

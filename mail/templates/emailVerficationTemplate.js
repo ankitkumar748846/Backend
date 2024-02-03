@@ -1,7 +1,6 @@
 const otpTemplate = (otp) => {
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
     <html>
-    
     <head>
         <meta charset="UTF-8">
         <title>OTP Verification Email</title>
@@ -76,7 +75,7 @@ const otpTemplate = (otp) => {
                     Thank You for registering with InkVika Studios. To Complete your registration, 
                     Please use the following OTP (One-Time Password) to verify your account: 
                 </p>
-                <h2 class="highlight">${otp} </h2>
+                <h2 class="highlight">${otp}</h2>
                 <p>
                     This OTP is valid for 5 minutes. If you did not request this verification, please disregard this email.
                     Once your account is verified, you will have access to our platform and its features.
@@ -90,5 +89,4 @@ const otpTemplate = (otp) => {
     </body>
     </html>`;
 };
-
 module.exports = otpTemplate;

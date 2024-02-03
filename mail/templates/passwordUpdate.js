@@ -1,7 +1,6 @@
 exports.passwordUpdated = (email, name) => {
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
     <html>
-    
         <head>
             <meta charset='UTF-8'>
             <title>Password Update Confirmation</title>
@@ -75,6 +74,5 @@ exports.passwordUpdated = (email, name) => {
                 </div>
             </div>
         </body>
-    
     </html>`;
 };
